@@ -1,0 +1,58 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hentaila.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/RUBIKOF/test1",
+        "fileSize": 19267,
+        "status": 1,
+        "language": "es",
+        "authors": [
+            "RUBIKOF"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 1,
+        "internalName": "HentailaProvider",
+        "url": "https://raw.githubusercontent.com/RUBIKOF/test1/builds/HentailaProvider.cs3",
+        "name": "HentailaProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hentaijk.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/RUBIKOF/test1",
+        "fileSize": 23816,
+        "status": 1,
+        "language": "es",
+        "authors": [
+            "RUBIKOF"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 1,
+        "internalName": "OtroProvider",
+        "description": "JKanime subpage but with tasty content",
+        "url": "https://raw.githubusercontent.com/RUBIKOF/test1/builds/OtroProvider.cs3",
+        "name": "OtroProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=jkanime.net&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/RUBIKOF/test1",
+        "fileSize": 23625,
+        "status": 1,
+        "language": "es",
+        "authors": [
+            
+        ],
+        "tvTypes": [
+            "Anime",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "TestProvider",
+        "url": "https://raw.githubusercontent.com/RUBIKOF/test1/builds/TestProvider.cs3",
+        "name": "TestProvider"
+    }
+]
