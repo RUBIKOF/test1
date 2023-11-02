@@ -1,4 +1,4 @@
-package com.example
+package com.test
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -94,8 +94,8 @@ class ExampleProvider : MainAPI() {
     }
 
     data class MainSearch(
-        @JsonProperty("animes") val animes: List<Animes>,
-        @JsonProperty("anime_types") val animeTypes: AnimeTypes
+            @JsonProperty("animes") val animes: List<Animes>,
+            @JsonProperty("anime_types") val animeTypes: AnimeTypes
     )
 
     data class Animes(
