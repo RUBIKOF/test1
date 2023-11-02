@@ -1,4 +1,4 @@
-package com.test
+package com.example
 
 
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -11,7 +11,7 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import java.util.*
 
 
-class TestProvider : MainAPI() {
+class ExampleProvider : MainAPI() {
     companion object {
         fun getType(t: String): TvType {
             return if (t.contains("OVA") || t.contains("Especial")) TvType.OVA
@@ -94,8 +94,8 @@ class TestProvider : MainAPI() {
     }
 
     data class MainSearch(
-            @JsonProperty("animes") val animes: List<Animes>,
-            @JsonProperty("anime_types") val animeTypes: AnimeTypes
+        @JsonProperty("animes") val animes: List<Animes>,
+        @JsonProperty("anime_types") val animeTypes: AnimeTypes
     )
 
     data class Animes(
