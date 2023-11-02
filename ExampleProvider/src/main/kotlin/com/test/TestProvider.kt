@@ -11,7 +11,7 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import java.util.*
 
 
-class ExampleProvider : MainAPI() {
+class TestProvider : MainAPI() {
     companion object {
         fun getType(t: String): TvType {
             return if (t.contains("OVA") || t.contains("Especial")) TvType.OVA
