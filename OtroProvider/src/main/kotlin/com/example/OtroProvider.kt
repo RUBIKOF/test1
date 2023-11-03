@@ -64,7 +64,7 @@ class OtroProvider : MainAPI() {
                             }
                             else{
                                 val epNum =
-                                        it.selectFirst("h6")?.text()?.replace("OVA ", "")?.toIntOrNull()
+                                        it.selectFirst("h6")?.text()?.replace("ONA ", "")?.toIntOrNull()
                             }
                             newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
