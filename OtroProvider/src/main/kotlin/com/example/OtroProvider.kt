@@ -55,20 +55,17 @@ class OtroProvider : MainAPI() {
                                     it.selectFirst(".anime__sidebar__comment__item__pic img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
                             val url = it.attr("href").replace(epRegex, "")
-                            val epNum =0
-                            val check: Boolean =  "OVA" in it.selectFirst("h6")?.text().toString()
-                            if(check) {
 
-                                val epNum =
-                                        it.selectFirst("h6")?.text()?.replace("OVA ", "")?.toIntOrNull()
-                            }
-                            else{
-                                val epNum =
-                                        it.selectFirst("h6")?.text()?.replace("ONA ", "")?.toIntOrNull()
+                            val epNum = it.selectFirst("h6")?.text().toString();
+
+                            if(epNum.contains("OVA")){
+                                epNum.replace("OVA ","");
+                            }else{
+                                epNum.replace("ONA ","");
                             }
                             newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
-                                addDubStatus(dubstat, epNum)
+                                addDubStatus(dubstat, epNum.toInt())
                             }
                         })
         )
