@@ -20,8 +20,8 @@ class OtroProvider : MainAPI() {
         }
     }
 
-    override var mainUrl = "https://jkanime.net"
-    override var name = "JKAnime"
+    override var mainUrl = "https://hentaijk.com/"
+    override var name = "HentaiJK"
     override var lang = "es"
     override val hasMainPage = true
     override val hasChromecastSupport = true
