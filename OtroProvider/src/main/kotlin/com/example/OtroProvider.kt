@@ -149,13 +149,22 @@ class OtroProvider : MainAPI() {
         }
         val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
         val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
-        val jsoneps = app.get(animeeps).text
+        /*val jsoneps = app.get(animeeps).text
         val lastepnum =
                 jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
         val episodes = (1..lastepnum).map {
             val link = "${url.removeSuffix("/")}/$it"
             Episode(link)
+        }*/
+
+        //Espacio Prueba
+        val test = doc.select("body > section.contenido.spad > div > div.row > div div div:nth-child(5)").size
+        val episodes = (1..test).map {
+            val link = "${url.removeSuffix("/")}/$it"
+            Episode(link)
         }
+
+        //Fin espacio prueba
 
         return newAnimeLoadResponse(title!!, url, getType(type!!)) {
             posterUrl = poster
