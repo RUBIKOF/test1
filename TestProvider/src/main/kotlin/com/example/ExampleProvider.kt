@@ -21,7 +21,7 @@ class ExampleProvider : MainAPI() {
     }
 
     override var mainUrl = "https://jkanime.net"
-    override var name = "JKAnime"
+    override var name = "JKAnime-test"
     override var lang = "es"
     override val hasMainPage = true
     override val hasChromecastSupport = true
