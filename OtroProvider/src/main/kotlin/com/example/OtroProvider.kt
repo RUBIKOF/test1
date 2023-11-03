@@ -56,7 +56,7 @@ class OtroProvider : MainAPI() {
                     val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
                     val url = it.attr("href").replace(epRegex, "")
                     val epNum =
-                        it.selectFirst("h6")?.text()?.replace("Episodio ", "")?.toIntOrNull()
+                        it.selectFirst("h6")?.text()?.replace("OVA ", "")?.toIntOrNull()
                     newAnimeSearchResponse(title, url) {
                         this.posterUrl = poster
                         addDubStatus(dubstat, epNum)
@@ -146,7 +146,7 @@ class OtroProvider : MainAPI() {
             "Concluido" -> ShowStatus.Completed
             else -> null
         }
-        val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
+            val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
         val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
         val jsoneps = app.get(animeeps).text
         val lastepnum =
