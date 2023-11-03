@@ -27,24 +27,18 @@ class OtroProvider : MainAPI() {
     override val hasChromecastSupport = true
     override val hasDownloadSupport = true
     override val supportedTypes = setOf(
-        TvType.AnimeMovie,
-        TvType.OVA,
-        TvType.Anime,
+        TvType.NSFW
     )
 
     override suspend fun getMainPage(page: Int, request : MainPageRequest): HomePageResponse {
         val urls = listOf(
             Pair(
-                "$mainUrl/directorio/?filtro=fecha&tipo=TV&estado=1&fecha=none&temporada=none&orden=desc",
+                "$mainUrl/directorio/?filtro=fecha&tipo=none&estado=1&fecha=none&temporada=none&orden=desc",
                 "En emisión"
             ),
             Pair(
                 "$mainUrl/directorio/?filtro=fecha&tipo=none&estado=none&fecha=none&temporada=none&orden=none",
-                "Animes"
-            ),
-            Pair(
-                "$mainUrl/directorio/?filtro=fecha&tipo=Movie&estado=none&fecha=none&temporada=none&orden=none",
-                "Películas"
+                "Hentai"
             ),
         )
 
