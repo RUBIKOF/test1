@@ -58,12 +58,12 @@ class HentaiLaProvider : MainAPI() {
                             val poster = mainUrl +
                                     it.selectFirst("img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
-                            val url = mainUrl + it.attr("href").replace("/ver/", "hentai-")
-                            val url2 = url.replace("-2","")
+                            val url = "https://www4.hentaila.com/hentai-warau-kangofu"
+                            //val url2 = url.replace("-2","")
                             val epNum =
                                     it.selectFirst("span")?.text()?.replace("OVA ", "")?.toIntOrNull()
 
-                            newAnimeSearchResponse(title, url2) {
+                            newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
                             }
@@ -142,8 +142,8 @@ class HentaiLaProvider : MainAPI() {
     override suspend fun load(url: String): LoadResponse {
         val doc = app.get(url, timeout = 120).document
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
-        val title = doc.selectFirst("header > h1")?.text()
-        val type = doc.selectFirst(".type-hentai")?.text()
+        val title = "prueba"
+        val type = "Hentai"
         val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
