@@ -52,18 +52,18 @@ class HentaiLaProvider : MainAPI() {
                 HomePageList(
                         "Últimos episodios",
                         app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
-                            val title = it.selectFirst("h2")?.text()
+                            //val title = it.selectFirst("h2")?.text()
                             val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
                                 DubStatus.Dubbed else DubStatus.Subbed
                             val poster = mainUrl +
                                     it.selectFirst("img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
                             val url = it.attr("href").replace("/ver/", "hentai-")
-                            val url2 = url.replace("-2","")
+                            val title = "test"
                             val epNum =
                                     it.selectFirst("span")?.text()?.replace("OVA ", "")?.toIntOrNull()
 
-                            newAnimeSearchResponse(title, url2) {
+                            newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
                             }
