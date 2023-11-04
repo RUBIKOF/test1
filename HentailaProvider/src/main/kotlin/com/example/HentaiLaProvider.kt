@@ -52,21 +52,20 @@ class HentaiLaProvider : MainAPI() {
                 HomePageList(
                         "Últimos episodios",
                         app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
-                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","")
-                            val z = x?.substring(x.lastIndexOf("-")).toString()
-                            val title = x?.replace(z,"")
-                            //val title = it.selectFirst("h2")?.text()
+
+                            val title = it.selectFirst("h2")?.text()
                             val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
                                 DubStatus.Dubbed else DubStatus.Subbed
                             val poster = mainUrl +
                                     it.selectFirst("img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
-                            val url = it.attr("href").replace("/ver/", "hentai-")
-                            val url2 = url.replace("-2","")
+                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","hentai-")
+                            val z = x?.substring(x.lastIndexOf("-")).toString()
+                            val url = mainUrl + x?.replace(z,"")
                             val epNum =
-                                    it.selectFirst("span")?.text()?.replace("OVA ", "")?.toIntOrNull()
+                                    it.selectFirst("span")?.text()?.replace("Episodio ", "")?.toIntOrNull()
 
-                            newAnimeSearchResponse(title, url2) {
+                            newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
                             }
