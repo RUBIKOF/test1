@@ -59,7 +59,7 @@ class HentaiLaProvider : MainAPI() {
                                     it.selectFirst("img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
                             val url = it.attr("href").replace("/ver/", "hentai-")
-                            val title = url.replace("-2","")
+                            val title = url.replace("-2","")?.text()
                             val epNum =
                                     it.selectFirst("span")?.text()?.replace("OVA ", "")?.toIntOrNull()
 
