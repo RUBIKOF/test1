@@ -141,19 +141,19 @@ class HentaiLaProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val doc = app.get(url, timeout = 120).document
-        val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
-        val title = doc.selectFirst(".anime__details__title > h3")?.text()
-        val type = doc.selectFirst(".anime__details__text")?.text()
-        val description = doc.selectFirst(".anime__details__text > p")?.text()
-        val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
+        val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
+        val title = doc.selectFirst("header > h1")?.text()
+        val type = doc.selectFirst(".type-hentai")?.text()
+        val description = doc.selectFirst(".h-content > p")?.text()
+        val genres = doc.select(".genres > a")
                 .map { it.text() }
-        val status = when (doc.selectFirst("span.enemision")?.text()) {
+        val status = when (doc.selectFirst(".status-off")?.text()) {
             "En emisión" -> ShowStatus.Ongoing
             "Concluido" -> ShowStatus.Completed
             else -> null
         }
-        val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
-        val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
+        //val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
+        //val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
         /*val jsoneps = app.get(animeeps).text
         val lastepnum =
                 jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
@@ -163,7 +163,7 @@ class HentaiLaProvider : MainAPI() {
         }*/
 
         //Espacio Prueba
-        val test = doc.select("body > section.contenido.spad > div > div.row > div div div:nth-child(5)").size
+        val test = doc.select(".episodes-list").size
         val episodes = (1..test).map {
             val link = "${url.removeSuffix("/")}/$it"
             Episode(link)
