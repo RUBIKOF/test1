@@ -52,8 +52,9 @@ class HentaiLaProvider : MainAPI() {
                 HomePageList(
                         "Últimos episodios",
                         app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
-                            val x = it.selectFirst("a")?.attr("href")
-                            val title = x
+                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","")
+                            val z = x?.substring(x.lastIndexOf("-"))
+                            val title = z?.replace(z,"")
                             //val title = it.selectFirst("h2")?.text()
                             val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
                                 DubStatus.Dubbed else DubStatus.Subbed
