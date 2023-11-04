@@ -52,7 +52,7 @@ class HentaiLaProvider : MainAPI() {
                 HomePageList(
                         "Últimos episodios",
                         app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
-                            val x = "esto es una prueba-2"
+                            val x = it.attr("href").replace("/ver/", "hentai-")
                             val otro = x.replace("-2","")
                             val title = otro
                             //val title = it.selectFirst("h2")?.text()
