@@ -144,7 +144,7 @@ class HentaiLaProvider : MainAPI() {
     override suspend fun load(url: String): LoadResponse {
         val doc = app.get(url, timeout = 120).document
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
-        val title = "prueba"
+        val title = doc.selectFirst(".h-title")?.text()
         val type = "Hentai"
         val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")

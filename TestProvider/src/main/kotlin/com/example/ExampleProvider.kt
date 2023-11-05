@@ -143,7 +143,7 @@ class ExampleProvider : MainAPI() {
         val doc = app.get(url, timeout = 120).document
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
         val title = doc.selectFirst(".anime__details__title > h3")?.text()
-        val type = doc.selectFirst(".anime__details__text")?.text()
+            val type = doc.selectFirst(".anime__details__text")?.text()
         val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
             .map { it.text() }
