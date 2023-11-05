@@ -166,9 +166,15 @@ class HentaiLaProvider : MainAPI() {
 
         //Espacio Prueba
         val test = doc.select(".episodes-list").size
+        val x = doc.select(".episodes-list a").attr("href")
+        val z = x?.substring(x.lastIndexOf("-")).toString()
+        val n = mainUrl + x?.replace(z,"")
         val episodes = (1..test).map {
-            val link = "${url.removeSuffix("/")}/$it"
+            val link = "${
+                //url.removeSuffix("/")}/$it"
+                mainUrl.removeSuffix("/")+n}-$it"
             Episode(link)
+
         }
 
         //Fin espacio prueba
