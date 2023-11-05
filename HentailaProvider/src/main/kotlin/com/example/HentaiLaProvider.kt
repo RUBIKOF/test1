@@ -145,7 +145,7 @@ class HentaiLaProvider : MainAPI() {
         val doc = app.get(url, timeout = 120).document
         val x = doc.select(".episodes-list a").attr("href")
         val z = x?.substring(x.lastIndexOf("-")).toString()
-        val n = mainUrl + x?.replace(z,"")
+        val n = x?.replace(z,"")
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "Hentai"
