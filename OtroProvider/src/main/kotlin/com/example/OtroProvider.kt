@@ -139,10 +139,12 @@ class OtroProvider : MainAPI() {
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
         val title = doc.selectFirst(".anime__details__title > h3")?.text()
         val type = doc.selectFirst(".anime__details__text")?.text()
+        val m = doc.getElementsByTag("script")
         val mm =doc.select("head > script:nth-child(32)")
+        val yy = m.first();
+        val zz = yy?.data();
 
-
-        val description = "otro " + mm
+        val description = "aqui:  " + zz + "\notro" + mm
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
