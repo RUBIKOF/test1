@@ -139,8 +139,8 @@ class OtroProvider : MainAPI() {
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
         val title = doc.selectFirst(".anime__details__title > h3")?.text()
         val type = doc.selectFirst(".anime__details__text")?.text()
-        val xx =doc.select("head > script:nth-child(32)").text()
-        val mm = xx.substring(xx.lastIndexOf("ajax/")).replace("ajax/social_counter/","")
+        val mm =doc.select("head > script:nth-child(32)")
+
 
         val description = "otro " + mm
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
