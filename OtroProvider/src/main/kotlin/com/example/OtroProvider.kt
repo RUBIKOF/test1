@@ -158,7 +158,7 @@ class OtroProvider : MainAPI() {
         }*/
 
         //Espacio Prueba
-        val test = doc.select("body > section.contenido.spad > div > div.row > div div div:nth-child(5)").size
+        val test = doc.select("div.epcontent.col-lg-3.col-md-6.col-sm-6.col-6").size
         val episodes = (1..test).map {
             val link = "${url.removeSuffix("/")}/$it"
             Episode(link)

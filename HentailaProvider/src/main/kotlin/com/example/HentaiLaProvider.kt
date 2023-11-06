@@ -146,8 +146,8 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "Hentai"
-        val description = "Numero de capitulos " + doc.select("article.hentai.episode.sm").size
-        //val description = doc.selectFirst(".h-content > p")?.text()
+        //val description = "Numero de capitulos " + doc.select("article.hentai.episode.sm").size
+        val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
@@ -166,7 +166,7 @@ class HentaiLaProvider : MainAPI() {
         }*/
 
         //Espacio Prueba
-        val test = doc.select(".episodes-list").size
+        val test = doc.select("article.hentai.episode.sm").size
         val x = doc.select(".episodes-list a").attr("href")
         val z = x?.substring(x.lastIndexOf("-")).toString()
         val n = x?.replace(z,"")
