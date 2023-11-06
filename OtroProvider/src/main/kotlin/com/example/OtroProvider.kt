@@ -141,10 +141,8 @@ class OtroProvider : MainAPI() {
         val type = doc.selectFirst(".anime__details__text")?.text()
         val xx =doc.select("head > script:nth-child(32)").text()
         val mm = xx.substring(xx.lastIndexOf("ajax/")).replace("ajax/social_counter/","")
-        val hentaiID = mm.substring(0,mm.indexOf("/")).toInt();
-        val hentaieps = mainUrl + "ajax/last_episode/" + hentaiID
 
-        val description = "otro " + hentaieps
+        val description = "otro " + mm
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
