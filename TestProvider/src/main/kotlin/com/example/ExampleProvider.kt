@@ -165,7 +165,7 @@ class ExampleProvider : MainAPI() {
             val json = parseJson<ArrayList<EpsInfo>>(res)
             json.apmap { info ->
                 val imagetest = !info.image.isNullOrBlank()
-                val image = if (imagetest) "https://cdn.jkdesu.com/assets/images/animes/video/image_thumb/${info.image}" else null
+                val image = if (imagetest) poster else null
                 val link = "${url.removeSuffix("/")}/${info.number}"
                 val ep = Episode(
                         link,
