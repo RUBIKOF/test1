@@ -143,9 +143,10 @@ class OtroProvider : MainAPI() {
         val xx =doc.select("head > script:nth-child(32)")
         val mm = xx.toString();
         val nn = mm.substring(mm.lastIndexOf("ajax/")).replace("ajax/social_counter/","");
+        val oo = nn.substring(0,nn.indexOf("/")).toInt()
 
 
-        val description = "otro2 " + nn
+        val description = "otro3 id " + oo
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
