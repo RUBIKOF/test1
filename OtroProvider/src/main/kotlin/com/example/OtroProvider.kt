@@ -141,8 +141,7 @@ class OtroProvider : MainAPI() {
         val type = doc.selectFirst(".anime__details__text")?.text()
         val m = doc.getElementsByTag("script")
         val mm =doc.select("head > script:nth-child(32)")
-        val yy = m.first();
-        val zz = yy?.data();
+
 
         val description = "otro" + mm
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
