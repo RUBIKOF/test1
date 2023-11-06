@@ -144,11 +144,7 @@ class ExampleProvider : MainAPI() {
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
         val title = doc.selectFirst(".anime__details__title > h3")?.text()
         val type = doc.selectFirst(".anime__details__text")?.text()
-        val xx = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
-        val zz = "$mainUrl/ajax/last_episode/$xx/"
-        val cc = app.get(zz).text
-        val description = "test" + cc
-        //val description = doc.selectFirst(".anime__details__text > p")?.text()
+        val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
             .map { it.text() }
         val status = when (doc.selectFirst("span.enemision")?.text()) {
