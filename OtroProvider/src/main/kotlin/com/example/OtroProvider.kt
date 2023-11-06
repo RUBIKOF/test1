@@ -144,7 +144,7 @@ class OtroProvider : MainAPI() {
         val yy = m.first();
         val zz = yy?.data();
 
-        val description = "aqui:  " + zz + "\notro" + mm
+        val description = "otro" + mm
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
