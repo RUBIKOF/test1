@@ -167,7 +167,7 @@ class OtroProvider : MainAPI() {
             val json = parseJson<ArrayList<EpsInfo>>(res)
             json.apmap { info ->
                 val imagetest = !info.image.isNullOrBlank()
-                val image = if (imagetest) "https://hentaijk.com/assets/images/animes/video/image_thumb/${info.image}" else null
+                val image = if (imagetest) "https://hentaijk.com/assets/images/animes/video/image_thumb/${info.image}" else poster
                 val link = "${url.removeSuffix("/")}/${info.number}"
                 val ep = Episode(
                         link,
