@@ -139,13 +139,7 @@ class OtroProvider : MainAPI() {
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
         val title = doc.selectFirst(".anime__details__title > h3")?.text()
         val type = doc.selectFirst(".anime__details__text")?.text()
-        val m = doc.getElementsByTag("script")
-        val mm =doc.select("head > script:nth-child(32)")
-        val yy = m.first();
-        val zz = yy?.data();
-
-        val description = "aqui:  " + zz + "\notro" + mm
-        //val description = doc.selectFirst(".anime__details__text > p")?.text()
+        val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
         val status = when (doc.selectFirst("span.enemision")?.text()) {
@@ -154,7 +148,7 @@ class OtroProvider : MainAPI() {
             else -> null
         }
         val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
-        val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
+        //val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
         /*val jsoneps = app.get(animeeps).text
         val lastepnum =
                 jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
@@ -164,8 +158,14 @@ class OtroProvider : MainAPI() {
         }*/
 
         //Espacio Prueba
-        val test = doc.select("div.epcontent.col-lg-3.col-md-6.col-sm-6.col-6").size
-        val episodes = (1..test).map {
+        val xx =doc.select("head > script:nth-child(32)").text()
+        val mm = xx.substring(xx.lastIndexOf("ajax/")).replace("ajax/social_counter/","")
+        val hentaiID = mm.substring(0,mm.indexOf("/")).toInt();
+        val hentaieps = mainUrl + "ajax/last_episode/" + hentaiID
+        val jsoneps = app.get(hentaieps).text
+        val lastepnum =
+                jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
+        val episodes = (1..lastepnum).map {
             val link = "${url.removeSuffix("/")}/$it"
             Episode(link)
         }
