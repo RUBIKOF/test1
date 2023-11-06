@@ -148,15 +148,6 @@ class OtroProvider : MainAPI() {
             "Concluido" -> ShowStatus.Completed
             else -> null
         }
-        val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
-        val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
-        /*val jsoneps = app.get(animeeps).text
-        val lastepnum =
-                jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
-        val episodes = (1..lastepnum).map {
-            val link = "${url.removeSuffix("/")}/$it"
-            Episode(link)
-        }*/
 
         //Espacio Prueba
         val m = doc.getElementsByTag("script")
