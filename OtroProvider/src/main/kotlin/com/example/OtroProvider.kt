@@ -119,7 +119,7 @@ class OtroProvider : MainAPI() {
         return json.animes.map {
             val title = it.title
             val href = "$mainUrl/${it.slug}"
-            val image = "https://cdn.jkanime.net/assets/images/animes/image/${it.slug}.jpg"
+            val image = "https://chentaijk.com/assets/images/animes/image/${it.slug}.jpg"
             AnimeSearchResponse(
                     title,
                     href,
