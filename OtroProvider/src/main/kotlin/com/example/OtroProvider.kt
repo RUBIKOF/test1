@@ -146,7 +146,7 @@ class OtroProvider : MainAPI() {
         val oo = nn.substring(0,nn.indexOf("/")).toInt()
 
 
-        val description = "otro3 id " + oo
+        val description = "$mainUrl/ajax/last_episode/$oo/"
         //val description = doc.selectFirst(".anime__details__text > p")?.text()
         val genres = doc.select("div.col-lg-6:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > a")
                 .map { it.text() }
