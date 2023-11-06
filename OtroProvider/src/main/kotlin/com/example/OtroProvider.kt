@@ -133,7 +133,11 @@ class OtroProvider : MainAPI() {
             )
         }
     }
-
+    data class EpsInfo (
+            @JsonProperty("number" ) var number : String? = null,
+            @JsonProperty("title"  ) var title  : String? = null,
+            @JsonProperty("image"  ) var image  : String? = null
+    )
     override suspend fun load(url: String): LoadResponse {
         val doc = app.get(url, timeout = 120).document
         val poster = doc.selectFirst(".set-bg")?.attr("data-setbg")
@@ -154,15 +158,23 @@ class OtroProvider : MainAPI() {
         val xx =doc.select("head > script:nth-child(32)")
         val mm = xx.toString();
         val nn = mm.substring(mm.lastIndexOf("ajax/")).replace("ajax/social_counter/","");
-        val hentaiID = nn.substring(0,nn.indexOf("/")).toInt()
 
-        val hentaieps = "$mainUrl/ajax/last_episode/$hentaiID/"
-        val jsoneps = app.get(hentaieps).text
-        val lastepnum =
-                jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
-        val episodes = (1..lastepnum).map {
-            val link = "${url.removeSuffix("/")}/$it"
-            Episode(link)
+        val hentaiID = nn.substring(0,nn.indexOf("/")).toInt()
+        val episodes = ArrayList<Episode>()
+        val pags = doc.select("a.numbers").map { it.attr("href").substringAfter("#pag") }
+        pags.apmap { pagnum ->
+            val res = app.get("$mainUrl/ajax/pagination_episodes/$hentaiID/$pagnum/").text
+            val json = parseJson<ArrayList<EpsInfo>>(res)
+            json.apmap { info ->
+                val imagetest = !info.image.isNullOrBlank()
+                val image = if (imagetest) "https://hentaijk.com/assets/images/animes/video/image_thumb/${info.image}" else null
+                val link = "${url.removeSuffix("/")}/${info.number}"
+                val ep = Episode(
+                        link,
+                        posterUrl = image
+                )
+                episodes.add(ep)
+            }
         }
 
         //Fin espacio prueba
