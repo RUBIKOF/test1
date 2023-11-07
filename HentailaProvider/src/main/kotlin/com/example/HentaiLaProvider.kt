@@ -9,6 +9,7 @@ import com.lagradost.cloudstream3.utils.M3u8Helper.Companion.generateM3u8
 import com.lagradost.cloudstream3.utils.getQualityFromName
 import com.lagradost.cloudstream3.utils.loadExtractor
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HentaiLaProvider : MainAPI() {
@@ -154,8 +155,12 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val json = parseJson<ArrayList<Searching>>(main)
+        var titulos ="";
+        val nombres = (1..json.size).map {
+           titulos += " "+ json[it].title
+        }
         val type = "Hentai"
-        val description = ""+ json[1].title
+        val description = ""+ titulos
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
