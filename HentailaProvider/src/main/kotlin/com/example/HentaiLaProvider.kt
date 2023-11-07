@@ -110,6 +110,12 @@ class HentaiLaProvider : MainAPI() {
             @JsonProperty("status") val status: String,
             @JsonProperty("thumbnail") val thumbnail: String
     )
+    data class Searching(
+            @JsonProperty("id") val id: String,
+            @JsonProperty("title") val title: String,
+            @JsonProperty("type") val type: String,
+            @JsonProperty("slug") val slug: String
+    )
 
     data class AnimeTypes(
             @JsonProperty("TV") val TV: String,
@@ -147,7 +153,7 @@ class HentaiLaProvider : MainAPI() {
         val main = app.get("$mainUrl/api/search?value=bible").text
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
-        val json = parseJson<ArrayList<Animes>>(main)
+        val json = parseJson<ArrayList<Searching>>(main)
         val type = "Hentai"
         val description = ""+ json[1].title
         //val description = doc.selectFirst(".h-content > p")?.text()
