@@ -129,7 +129,7 @@ class HentaiLaProvider : MainAPI() {
     override suspend fun search(query: String): List<SearchResponse> {
         val main = app.get("$mainUrl/api/search?value=$query").text
         //val json = parseJson<MainSearch>(main)
-        val json = parseJson<ArrayList<Animes>>(main)
+        val json = parseJson<ArrayList<Searching>>(main)
         return json.apmap {
             val title = it.title
             val href = "$mainUrl/hentai-${it.slug}"
