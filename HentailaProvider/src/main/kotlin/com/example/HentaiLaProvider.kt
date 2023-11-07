@@ -125,7 +125,7 @@ class HentaiLaProvider : MainAPI() {
         val json = parseJson<MainSearch>(main)
         return json.animes.map {
             val title = it.title
-            val href = "$mainUrl/${it.slug}"
+            val href = "$mainUrl/hentai-${it.slug}"
             val image = mainUrl + "uploads/portadas/${it.id}.jpg"
             AnimeSearchResponse(
                     title,
