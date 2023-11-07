@@ -155,8 +155,8 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val json = parseJson<ArrayList<Searching>>(main)
-        var titulos ="";
-        for(i in 1..json.size){
+        var titulos =""
+        for(i in 0..json.size-1){
             titulos += " "+ json[i].title
         }
 
