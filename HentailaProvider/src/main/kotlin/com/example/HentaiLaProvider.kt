@@ -157,7 +157,7 @@ class HentaiLaProvider : MainAPI() {
         val json = parseJson<ArrayList<Searching>>(main)
         var titulos =""
         for(i in 0..json.size-1){
-            titulos += " "+ json[i].title
+            titulos += " " + json[i].title
         }
 
         val type = "Hentai"
