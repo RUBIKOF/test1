@@ -121,12 +121,12 @@ class HentaiLaProvider : MainAPI() {
     )
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val main = app.get("$mainUrl/ajax/ajax_search/?q=$query").text
+        val main = app.get("$mainUrl/api/search?value=$query").text
         val json = parseJson<MainSearch>(main)
         return json.animes.map {
             val title = it.title
             val href = "$mainUrl/${it.slug}"
-            val image = "https://cdn.jkanime.net/assets/images/animes/image/${it.slug}.jpg"
+            val image = mainUrl + "uploads/portadas/${it.id}.jpg"
             AnimeSearchResponse(
                     title,
                     href,
