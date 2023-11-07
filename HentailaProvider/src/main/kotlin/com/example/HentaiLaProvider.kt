@@ -147,8 +147,9 @@ class HentaiLaProvider : MainAPI() {
         val main = app.get("$mainUrl/api/search?value=bible").text
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
+        val json = parseJson<ArrayList<Animes>>(main)
         val type = "Hentai"
-        val description = ""+ main
+        val description = ""+ json[1].title
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
