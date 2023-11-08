@@ -151,17 +151,11 @@ class HentaiLaProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val doc = app.get(url, timeout = 120).document
-        val main = app.get("$mainUrl/api/search?value=bible").text
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
-        val json = parseJson<ArrayList<Searching>>(main)
-        var titulos =""
-        for(i in 0..json.size-1){
-            titulos += " " + json[i].title
-        }
-
         val type = "Hentai"
-        val description = ""+ titulos
+        val check = app.get("https://jkanime.net/zanting-rang-wo-cha-gonglue/1/", timeout = 120).document
+        val description = ""+ check.data()
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
