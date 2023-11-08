@@ -154,8 +154,25 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "Hentai"
-        val check = app.get("https://jkanime.net/zanting-rang-wo-cha-gonglue/1/", timeout = 120).document
-        val description = ""+ check.data()
+        val lista = ArrayList<String>()
+        var urls ="nada";
+        val check = "https://jkanime.net/zanting-rang-wo-cha-gonglue/1/"
+        app.get(check).document.select("script").apmap{ script ->
+            if (script.data().contains("var video = []")) {
+                val videos = script.data().replace("\\/", "/")
+                fetchUrls(videos).map {
+                    lista.add(it.replace("$mainUrl/jkfembed.php?u=", "https://embedsito.com/v/")
+                            .replace("$mainUrl/jkokru.php?u=", "http://ok.ru/videoembed/")
+                            .replace("$mainUrl/jkvmixdrop.php?u=", "https://mixdrop.co/e/")
+                            .replace("$mainUrl/jk.php?u=", "$mainUrl/"))
+                }
+            }
+        }
+
+        for(i in 0..lista.size){
+            urls += "-" + lista[i] + "-\n"
+        }
+        val description = ""+ urls
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
