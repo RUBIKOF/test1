@@ -169,7 +169,7 @@ class HentaiLaProvider : MainAPI() {
             }
         }
 
-        for(i in 0..lista.size){
+        for(i in 0..lista.size-1){
             urls += "-" + lista[i] + "-\n"
         }
         val description = ""+ urls
