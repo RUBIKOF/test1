@@ -154,8 +154,9 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        val img = doc.select(".episodes-list img").attr("src")
-        val description = img.get(0).toString() +"-"+ img.get(1).toString() +"-"+ img.get(2).toString() +"-"+ img.get(3).toString()
+        val ff = doc.select(".episodes-list article:nth-child(1) img")
+        val zz = mainUrl.removeSuffix("/")+ff
+        val description = "Aqui: " + zz
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
@@ -172,7 +173,7 @@ class HentaiLaProvider : MainAPI() {
         val z = x?.substring(x.lastIndexOf("-")).toString()
         val n = x?.replace(z,"")
 
-        val otro = (1..test).map {
+        (1..test).map {
             val ff = doc.select(".episodes-list article:nth-child("+(it-1)+") img")
             val zz = mainUrl.removeSuffix("/")+ff
             val link = "${
