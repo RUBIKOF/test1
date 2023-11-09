@@ -168,22 +168,28 @@ class HentaiLaProvider : MainAPI() {
         //Espacio Prueba
         val test = doc.select("article.hentai.episode.sm").size
         val x = doc.select(".episodes-list a").attr("href")
-
+        val episodes1 = java.util.ArrayList<Episode>()
         val z = x?.substring(x.lastIndexOf("-")).toString()
         val n = x?.replace(z,"")
-        val episodes = (1..test).map {
+
+        val otro = (1..test).map {
+            val ff = doc.select(".episodes-list article:nth-child("+(it-1)+") img")
+            val zz = mainUrl.removeSuffix("/")+ff
             val link = "${
                 //url.removeSuffix("/")}/$it"
                 mainUrl.removeSuffix("/")+n}-1"
-            Episode(link)
-
+            val ep = Episode(
+                    link,
+                    posterUrl = zz
+            )
+            episodes1.add(ep)
         }
 
         //Fin espacio prueba
 
         return newAnimeLoadResponse(title!!, url, TvType.Others) {
             posterUrl = poster
-            addEpisodes(DubStatus.Subbed, episodes)
+            addEpisodes(DubStatus.Subbed, episodes1)
             showStatus = status
             plot = description
             tags = genres
