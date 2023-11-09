@@ -187,7 +187,7 @@ class HentaiLaProvider : MainAPI() {
 
         //Fin espacio prueba
 
-        return newAnimeLoadResponse(title!!, url, getType(type!!)) {
+        return newAnimeLoadResponse(title!!, url, TvType.Others) {
             posterUrl = poster
             addEpisodes(DubStatus.Subbed, episodes)
             showStatus = status
