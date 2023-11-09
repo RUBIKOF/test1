@@ -155,7 +155,7 @@ class HentaiLaProvider : MainAPI() {
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
         val img = doc.select(".episodes-list img").attr("src")
-        val description = img.toString()
+        val description = img.get(0).toString() +"-"+ img.get(1).toString() +"-"+ img.get(2).toString() +"-"+ img.get(3).toString()
         //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
