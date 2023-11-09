@@ -154,7 +154,19 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        val description = doc.selectFirst(".h-content > p")?.text()
+        var guarda = "Aqui: ";
+        app.get("https://www4.hentaila.com/hentai-hajimete-no-hitozuma").document.select("script").apmap { script ->
+            if (script.data().contains("var videos = [[")) {
+                val videos = script.data().replace("\\/", "/")
+                fetchUrls(videos).map {
+                    it.replace("https://ok.ru", "http://ok.ru")
+                }.apmap {
+                    guarda += it + "/--/"
+                }
+            }
+        }
+        val description = guarda
+        //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
