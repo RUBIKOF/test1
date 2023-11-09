@@ -154,10 +154,7 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        val ff = doc.select(".episodes-list article:nth-child(1) img")
-        val zz = mainUrl.removeSuffix("/")+ff
-        val description = "Aqui: " + zz
-        //val description = doc.selectFirst(".h-content > p")?.text()
+        val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
@@ -174,7 +171,7 @@ class HentaiLaProvider : MainAPI() {
         val n = x?.replace(z,"")
 
         (1..test).map {
-            val ff = doc.select(".episodes-list article:nth-child("+(it-1)+") img")
+            val ff = doc.select(".episodes-list article:nth-child("+(it-1)+") img").attr("src")
             val zz = mainUrl.removeSuffix("/")+ff
             val link = "${
                 //url.removeSuffix("/")}/$it"
