@@ -170,8 +170,8 @@ class HentaiLaProvider : MainAPI() {
         val z = x?.substring(x.lastIndexOf("-")).toString()
         val n = x?.replace(z,"")
 
-        (1..test).map {
-            val ff = doc.select(".episodes-list article:nth-child("+(test-1)+") img").attr("src")
+        for(i in 1..test) {
+             val ff = doc.select(".episodes-list article:nth-child("+(test-1)+") img").attr("src")
             val zz = mainUrl.removeSuffix("/")+ff
             val link = "${
                 //url.removeSuffix("/")}/$it"
