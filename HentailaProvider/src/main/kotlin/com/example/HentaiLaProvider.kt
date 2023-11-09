@@ -154,7 +154,9 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        val description = doc.selectFirst(".h-content > p")?.text()
+        val img = doc.select(".episodes-list img").attr("src")
+        val description = img.toString()
+        //val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
@@ -162,19 +164,11 @@ class HentaiLaProvider : MainAPI() {
             "Concluido" -> ShowStatus.Completed
             else -> null
         }
-        //val animeID = doc.selectFirst("div.ml-2")?.attr("data-anime")?.toInt()
-        //val animeeps = "$mainUrl/ajax/last_episode/$animeID/"
-        /*val jsoneps = app.get(animeeps).text
-        val lastepnum =
-                jsoneps.substringAfter("{\"number\":\"").substringBefore("\",\"title\"").toInt()
-        val episodes = (1..lastepnum).map {
-            val link = "${url.removeSuffix("/")}/$it"
-            Episode(link)
-        }*/
 
         //Espacio Prueba
         val test = doc.select("article.hentai.episode.sm").size
         val x = doc.select(".episodes-list a").attr("href")
+
         val z = x?.substring(x.lastIndexOf("-")).toString()
         val n = x?.replace(z,"")
         val episodes = (1..test).map {
