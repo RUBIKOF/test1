@@ -153,11 +153,8 @@ class HentaiLaProvider : MainAPI() {
         val doc = app.get(url, timeout = 120).document
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
-        val type = "Hentai"
-        val test1 = app.get("https://www4.hentaila.com/ver/hajimete-no-hitozuma-1", timeout = 120).document
-        val test2 =test1.select("script")
-        val description = "aqui2: " + test2.text()
-        //val description = doc.selectFirst(".h-content > p")?.text()
+        val type = "OVA"
+        val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
