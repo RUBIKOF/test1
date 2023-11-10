@@ -230,9 +230,13 @@ class HentaiLaProvider : MainAPI() {
             if (script.data().contains("var videos = [[")) {
                 val videos = script.data().replace("\\/", "/")
                 fetchUrls(videos).map {
-                    it.replace("https://ok.ru", "http://ok.ru")
-                }.apmap {
-                    loadExtractor(it, data, subtitleCallback, callback)
+                    it.replace("$mainUrl/jkfembed.php?u=", "https://embedsito.com/v/")
+                            .replace("$mainUrl/jkokru.php?u=", "http://ok.ru/videoembed/")
+                            .replace("$mainUrl/jkvmixdrop.php?u=", "https://mixdrop.co/e/")
+                            .replace("$mainUrl/jk.php?u=", "$mainUrl/")
+                }.apmap { link ->
+                    loadExtractor(link, data, subtitleCallback, callback)
+
                 }
             }
         }
