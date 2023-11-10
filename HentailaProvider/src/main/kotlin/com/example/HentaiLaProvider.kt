@@ -72,11 +72,12 @@ class HentaiLaProvider : MainAPI() {
                         }, isHorizontal)
         )
         urls.apmap { (url, name) ->
-            val numpages = app.get(url).document.select("#aa-wp > div > div > main > section > nav > ul li ").size
-            val maxpages = app.get(url).document.selectFirst("#aa-wp > div > div > main > section > nav > ul li:nth-child("+ (numpages-1) +") a ")?.attr("href")?.replace("/genero/tetonas?p=","")?:""
-            val random = (1..maxpages.toInt()).shuffled().last()
+
             val soup: Document
             if(url.contains("tetonas")){
+                val numpages = app.get(url).document.select("#aa-wp > div > div > main > section > nav > ul li ").size
+                val maxpages = app.get(url).document.selectFirst("#aa-wp > div > div > main > section > nav > ul li:nth-child("+ (numpages-1) +") a ")?.attr("href")?.replace("/genero/tetonas?p=","")?:""
+                val random = (1..maxpages.toInt()).shuffled().last()
                 soup = app.get(url+"?p=" +random).document
             }
             else{
