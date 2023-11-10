@@ -243,7 +243,7 @@ class HentaiLaProvider : MainAPI() {
                 fetchUrls(videos).map {
                     it.replace("https://ok.ru", "http://ok.ru")
                 }.apmap {
-                    loadExtractor(",https://voe.sx/e/zkqtvm4xr2cr", "https://www4.hentaila.com/ver/hajimete-no-hitozuma-1", subtitleCallback, callback)
+                    loadExtractor(",https://www.mp4upload.com/embed-z88msz4sbodl.html", "https://www4.hentaila.com/ver/hajimete-no-hitozuma-1", subtitleCallback, callback)
                 }
             }
         }
