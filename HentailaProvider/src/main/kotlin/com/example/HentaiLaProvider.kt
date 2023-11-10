@@ -48,7 +48,7 @@ class HentaiLaProvider : MainAPI() {
         )
 
         val items = ArrayList<HomePageList>()
-
+        val isHorizontal = true
         items.add(
                 HomePageList(
                         "Últimos episodios",
@@ -70,7 +70,7 @@ class HentaiLaProvider : MainAPI() {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
                             }
-                        })
+                        }, isHorizontal)
         )
         urls.apmap { (url, name) ->
             val soup = app.get(url).document
