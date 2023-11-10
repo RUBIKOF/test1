@@ -176,7 +176,7 @@ class HentaiLaProvider : MainAPI() {
             val zz = mainUrl.removeSuffix("/")+ff
             val link = "${
                 //url.removeSuffix("/")}/$it"
-                mainUrl.removeSuffix("/")+n}-" +i
+                mainUrl.removeSuffix("/")+n}-"+i
             val ep = Episode(
                     link,
                     posterUrl = zz
