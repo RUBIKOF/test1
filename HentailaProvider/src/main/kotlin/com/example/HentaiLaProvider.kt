@@ -154,19 +154,7 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        var texto ="aquiii: "
-        app.get("https://www4.hentaila.com/ver/hajimete-no-hitozuma-1").document.select("script").apmap { script ->
-            if (script.data().contains("var videos = [[")) {
-                val videos = script.data().replace("\\/", "/")
-                fetchUrls(videos).map {
-                    it.replace("https://ok.ru", "http://ok.ru")
-                }.apmap {
-                    texto += it + "/--/"
-                }
-            }
-        }
-        val description = texto
-        //val description = doc.selectFirst(".h-content > p")?.text()
+        val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
@@ -243,7 +231,7 @@ class HentaiLaProvider : MainAPI() {
                 fetchUrls(videos).map {
                     it.replace("https://ok.ru", "http://ok.ru")
                 }.apmap {
-                    loadExtractor("https://www.mp4upload.com/embed-z88msz4sbodl.html", "https://www4.hentaila.com/ver/hajimete-no-hitozuma-1", subtitleCallback, callback)
+                    loadExtractor(it, "data", subtitleCallback, callback)
                 }
             }
         }
