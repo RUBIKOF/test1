@@ -6,8 +6,8 @@ cloudstream {
     language = "es"
     // All of these properties are optional, you can safely remove them
 
-    // description = "Lorem Ipsum"
-    // authors = listOf("Cloudburst")
+     description = "JKanime subpage but with tasty content"
+     authors = listOf("RUBIKOF")
 
     /**
      * Status int as the following:
@@ -19,5 +19,5 @@ cloudstream {
     status = 1 // will be 3 if unspecified
     tvTypes = listOf("NSFW")
 
-    iconUrl = "https://www.google.com/s2/favicons?domain=jkanime.net&sz=%size%"
+    iconUrl = "https://www.google.com/s2/favicons?domain=hentaijk.com&sz=%size%"
 }
