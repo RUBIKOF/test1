@@ -237,13 +237,13 @@ class HentaiLaProvider : MainAPI() {
             subtitleCallback: (SubtitleFile) -> Unit,
             callback: (ExtractorLink) -> Unit
     ): Boolean {
-        app.get(data).document.select("script").apmap { script ->
+        app.get("https://www4.hentaila.com/ver/hajimete-no-hitozuma-1").document.select("script").apmap { script ->
             if (script.data().contains("var videos = [[")) {
                 val videos = script.data().replace("\\/", "/")
                 fetchUrls(videos).map {
                     it.replace("https://ok.ru", "http://ok.ru")
                 }.apmap {
-                    loadExtractor(it, data, subtitleCallback, callback)
+                    loadExtractor("https://yourupload.com/embed/d6fADX142VkU", "https://www4.hentaila.com/ver/hajimete-no-hitozuma-1", subtitleCallback, callback)
                 }
             }
         }
