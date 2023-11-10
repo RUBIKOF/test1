@@ -225,7 +225,7 @@ class HentaiLaProvider : MainAPI() {
             subtitleCallback: (SubtitleFile) -> Unit,
             callback: (ExtractorLink) -> Unit
     ): Boolean {
-        app.get("https://www4.hentaila.com/ver/hajimete-no-hitozuma-1").document.select("script").apmap { script ->
+        app.get(data).document.select("script").apmap { script ->
             if (script.data().contains("var videos = [[")) {
                 val videos = script.data().replace("\\/", "/")
                 fetchUrls(videos).map {
