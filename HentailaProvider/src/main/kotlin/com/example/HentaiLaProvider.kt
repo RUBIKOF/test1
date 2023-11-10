@@ -52,20 +52,16 @@ class HentaiLaProvider : MainAPI() {
         items.add(
                 HomePageList(
                         "Últimos episodios",
-                        app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
-
-                            val title = it.selectFirst("h2")?.text()
+                        app.get(mainUrl).document.select(".listadoanime-home a.bloqq").map {
+                            val title = it.selectFirst("h5")?.text()
                             val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
                                 DubStatus.Dubbed else DubStatus.Subbed
-                            val poster = mainUrl +
-                                    it.selectFirst("img")?.attr("src")
+                            val poster =
+                                    it.selectFirst(".anime__sidebar__comment__item__pic img")?.attr("src") ?: ""
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
-                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","hentai-")
-                            val z = x?.substring(x.lastIndexOf("-")).toString()
-                            val url = mainUrl + x?.replace(z,"")
+                            val url = it.attr("href").replace(epRegex, "")
                             val epNum =
-                                    it.selectFirst("span")?.text()?.replace("Episodio ", "")?.toIntOrNull()
-
+                                    it.selectFirst("h6")?.text()?.replace("Episodio ", "")?.toIntOrNull()
                             newAnimeSearchResponse(title, url) {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
