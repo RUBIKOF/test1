@@ -74,9 +74,9 @@ class HentaiLaProvider : MainAPI() {
         )
         urls.apmap { (url, name) ->
             val soup = app.get(url).document
-            val home = soup.select(".g-0").map {
-                val title = it.selectFirst("h5 a")?.text()
-                val poster = it.selectFirst("img")?.attr("src") ?: ""
+            val home = soup.select(".section article").map {
+                val title = it.selectFirst("h2")?.text()
+                val poster = mainUrl + it.selectFirst("img")?.attr("src") ?: ""
                 AnimeSearchResponse(
                         title!!,
                         fixUrl(it.selectFirst("a")?.attr("href") ?: ""),
