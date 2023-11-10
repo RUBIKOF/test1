@@ -57,9 +57,11 @@ class HentaiLaProvider : MainAPI() {
                             val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
                                 DubStatus.Dubbed else DubStatus.Subbed
                             val poster =
-                                    mainUrl + it.selectFirst(".anime__sidebar__comment__item__pic img")?.attr("src")
+                                    mainUrl + it.selectFirst("img")?.attr("src")
                             val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
-                            val url = it.attr("href").replace(epRegex, "")
+                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","hentai-")
+                            val z = x?.substring(x.lastIndexOf("-")).toString()
+                            val url = mainUrl + x?.replace(z,"")
                             val epNum =
                                     it.selectFirst("span")?.text()?.replace("Episodio ", "")?.toIntOrNull()
                             newAnimeSearchResponse(title, url) {
