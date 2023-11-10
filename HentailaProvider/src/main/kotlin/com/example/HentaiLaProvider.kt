@@ -70,7 +70,7 @@ class HentaiLaProvider : MainAPI() {
                                 this.posterUrl = poster
                                 addDubStatus(dubstat, epNum)
                             }
-                        },true)
+                        })
         )
         urls.apmap { (url, name) ->
             val soup = app.get(url).document
