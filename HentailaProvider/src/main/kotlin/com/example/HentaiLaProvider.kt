@@ -155,7 +155,7 @@ class HentaiLaProvider : MainAPI() {
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
         var guarda = "Aqui: ";
-        app.get("https://www4.hentaila.com/hentai-hajimete-no-hitozuma").document.select("script").apmap { script ->
+        app.get("https://www4.hentaila.com/ver/hajimete-no-hitozuma-1").document.select("script").apmap { script ->
             if (script.data().contains("var videos = [[")) {
                 val videos = script.data().replace("\\/", "/")
                 fetchUrls(videos).map {
