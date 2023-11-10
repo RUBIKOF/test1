@@ -8,6 +8,7 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper.Companion.generateM3u8
 import com.lagradost.cloudstream3.utils.getQualityFromName
 import com.lagradost.cloudstream3.utils.loadExtractor
+import org.jsoup.nodes.Document
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -71,11 +72,18 @@ class HentaiLaProvider : MainAPI() {
                         }, isHorizontal)
         )
         urls.apmap { (url, name) ->
-            val j = url.get(0)
-            val soup = app.get(url).document
+            val numpages = app.get(url).document.select("#aa-wp > div > div > main > section > nav > ul li ").size
+            val maxpages = app.get(url).document.selectFirst("#aa-wp > div > div > main > section > nav > ul li:nth-child("+ (numpages-1) +") a ").toString()
+            val random = (1..maxpages.toInt()).shuffled().last()
+            val soup: Document
+            if(url.contains("tetonas")){
+                soup = app.get(url+"?p=" +random).document
+            }
+            else{
+                soup = app.get(url).document
+            }
             val home = soup.select(".section article").map {
-                //val title = it.selectFirst("h2")?.text()
-                val title = j.toString()
+                val title = it.selectFirst("h2")?.text()
                 val poster = mainUrl + it.selectFirst("img")?.attr("src")
                 AnimeSearchResponse(
                         title!!,
