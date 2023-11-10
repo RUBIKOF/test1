@@ -154,8 +154,7 @@ class HentaiLaProvider : MainAPI() {
         val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
         val title = doc.selectFirst(".h-title")?.text()
         val type = "OVA"
-        //val description = doc.selectFirst(".h-content > p")?.text()
-        val description="prueba"
+        val description = doc.selectFirst(".h-content > p")?.text()
         val genres = doc.select(".genres > a")
                 .map { it.text() }
         val status = when (doc.selectFirst(".status-off")?.text()) {
@@ -230,13 +229,9 @@ class HentaiLaProvider : MainAPI() {
             if (script.data().contains("var videos = [[")) {
                 val videos = script.data().replace("\\/", "/")
                 fetchUrls(videos).map {
-                    it.replace("$mainUrl/jkfembed.php?u=", "https://embedsito.com/v/")
-                            .replace("$mainUrl/jkokru.php?u=", "http://ok.ru/videoembed/")
-                            .replace("$mainUrl/jkvmixdrop.php?u=", "https://mixdrop.co/e/")
-                            .replace("$mainUrl/jk.php?u=", "$mainUrl/")
-                }.apmap { link ->
-                    loadExtractor(link, data, subtitleCallback, callback)
-
+                    it.replace("https://ok.ru", "http://ok.ru")
+                }.apmap {
+                    loadExtractor(it, data, subtitleCallback, callback)
                 }
             }
         }
