@@ -231,7 +231,7 @@ class HentaiLaProvider : MainAPI() {
                 fetchUrls(videos).map {
                     it.replace("https://ok.ru", "http://ok.ru")
                 }.apmap {
-                    loadExtractor(it, "data", subtitleCallback, callback)
+                    loadExtractor(it, data, subtitleCallback, callback)
                 }
             }
         }
