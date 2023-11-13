@@ -20,6 +20,7 @@ cloudstream {
     tvTypes = listOf(
             "TvSeries",
             "Movie",
+    )
 
     iconUrl = "https://www.google.com/s2/favicons?domain=cuevana3.ch&sz=%size%"
 }
