@@ -46,6 +46,10 @@ class HentaiLaProvider : MainAPI() {
                         "$mainUrl/genero/milfs",
                         "Milf"
                 ),
+                Pair(
+                        "$mainUrl/genero/milfs",
+                        "Milf"
+                ),
         )
 
         val items = ArrayList<HomePageList>()
@@ -72,7 +76,6 @@ class HentaiLaProvider : MainAPI() {
                         }, isHorizontal)
         )
         urls.apmap { (url, name) ->
-
             val soup: Document
             if(url.contains("tetonas")){
                 val numpages = app.get(url).document.select("#aa-wp > div > div > main > section > nav > ul li ").size
