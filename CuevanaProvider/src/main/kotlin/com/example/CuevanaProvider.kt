@@ -14,187 +14,219 @@ import kotlin.collections.ArrayList
 
 
 class CuevanaProvider : MainAPI() {
-    override var mainUrl = "https://cuevana3.ch"
-    override var name = "Cuevana"
+    companion object {
+        fun getType(t: String): TvType {
+            return if (t.contains("OVA") || t.contains("Especial")) TvType.OVA
+            else if (t.contains("Pelicula")) TvType.AnimeMovie
+            else TvType.Anime
+        }
+    }
+
+    override var mainUrl = "https://www4.hentaila.com/"
+    override var name = "HentaiLA"
     override var lang = "es"
     override val hasMainPage = true
     override val hasChromecastSupport = true
     override val hasDownloadSupport = true
     override val supportedTypes = setOf(
-            TvType.Movie,
-            TvType.TvSeries,
+            TvType.NSFW
     )
 
     override suspend fun getMainPage(page: Int, request : MainPageRequest): HomePageResponse {
-        val items = ArrayList<HomePageList>()
         val urls = listOf(
-                Pair(mainUrl, "Recientemente actualizadas"),
-                Pair("$mainUrl/estrenos/", "Estrenos"),
+                Pair(
+                        "$mainUrl/genero/tetonas",
+                        "Tetonas"
+                ),
+                Pair(
+                        "$mainUrl/genero/incesto",
+                        "Incesto"
+                ),
+                Pair(
+                        "$mainUrl/genero/milfs",
+                        "Milf"
+                ),
         )
+
+        val items = ArrayList<HomePageList>()
+        val isHorizontal = true
         items.add(
                 HomePageList(
-                        "Series",
-                        app.get("$mainUrl/serie", timeout = 120).document.select("section.home-series li")
-                                .map {
-                                    val title = it.selectFirst("h2.Title")!!.text()
-                                    val poster = it.selectFirst("img.lazy")!!.attr("data-src")
-                                    val url = it.selectFirst("a")!!.attr("href")
-                                    TvSeriesSearchResponse(
-                                            title,
-                                            url,
-                                            this.name,
-                                            TvType.Anime,
-                                            poster,
-                                            null,
-                                            null,
-                                    )
-                                })
+                        "Últimos episodios",
+                        app.get(mainUrl).document.select("#aa-wp > div > section.section.episodes > div > article").map {
+                            val title = it.selectFirst("h2")?.text()
+                            val dubstat = if (title!!.contains("Latino") || title.contains("Castellano"))
+                                DubStatus.Dubbed else DubStatus.Subbed
+                            val poster =
+                                    mainUrl + it.selectFirst("img")?.attr("src")
+                            val epRegex = Regex("/(\\d+)/|/especial/|/ova/")
+                            val x = it.selectFirst("a")?.attr("href")?.replace("/ver/","hentai-")
+                            val z = x?.substring(x.lastIndexOf("-")).toString()
+                            val url = mainUrl + x?.replace(z,"")
+                            val epNum =
+                                    it.selectFirst("span")?.text()?.replace("Episodio ", "")?.toIntOrNull()
+                            newAnimeSearchResponse(title, url) {
+                                this.posterUrl = poster
+                                addDubStatus(dubstat, epNum)
+                            }
+                        }, isHorizontal)
         )
-        for ((url, name) in urls) {
-            try {
-                val soup = app.get(url).document
-                val home = soup.select("section li.xxx.TPostMv").map {
-                    val title = it.selectFirst("h2.Title")!!.text()
-                    val link = it.selectFirst("a")!!.attr("href")
-                    TvSeriesSearchResponse(
-                            title,
-                            link,
-                            this.name,
-                            if (link.contains("/pelicula/")) TvType.Movie else TvType.TvSeries,
-                            it.selectFirst("img.lazy")!!.attr("data-src"),
-                            null,
-                            null,
-                    )
-                }
+        urls.apmap { (url, name) ->
 
-                items.add(HomePageList(name, home))
-            } catch (e: Exception) {
-                logError(e)
+            val soup: Document
+            if(url.contains("tetonas")){
+                val numpages = app.get(url).document.select("#aa-wp > div > div > main > section > nav > ul li ").size
+                val maxpages = app.get(url).document.selectFirst("#aa-wp > div > div > main > section > nav > ul li:nth-child("+ (numpages-1) +") a ")?.attr("href")?.replace("/genero/tetonas?p=","")?:""
+                val random = (1..maxpages.toInt()).shuffled().last()
+                soup = app.get(url+"?p=" +random).document
             }
+            else{
+                soup = app.get(url).document
+            }
+            val home = soup.select(".section article").map {
+                val title = it.selectFirst("h2")?.text()
+                val poster = mainUrl + it.selectFirst("img")?.attr("src")
+                AnimeSearchResponse(
+                        title!!,
+                        fixUrl(it.selectFirst("a")?.attr("href") ?: ""),
+                        this.name,
+                        TvType.Anime,
+                        fixUrl(poster),
+                        null,
+                        if (title.contains("Latino") || title.contains("Castellano")) EnumSet.of(
+                                DubStatus.Dubbed
+                        ) else EnumSet.of(DubStatus.Subbed),
+                )
+            }
+            items.add(HomePageList(name, home))
         }
 
         if (items.size <= 0) throw ErrorLoadingException()
         return HomePageResponse(items)
     }
 
+    data class MainSearch(
+            @JsonProperty("animes") val animes: List<Animes>,
+            @JsonProperty("anime_types") val animeTypes: AnimeTypes
+    )
+
+    data class Animes(
+            @JsonProperty("id") val id: String,
+            @JsonProperty("slug") val slug: String,
+            @JsonProperty("title") val title: String,
+            @JsonProperty("image") val image: String,
+            @JsonProperty("synopsis") val synopsis: String,
+            @JsonProperty("type") val type: String,
+            @JsonProperty("status") val status: String,
+            @JsonProperty("thumbnail") val thumbnail: String
+    )
+    data class Searching(
+            @JsonProperty("id") val id: String,
+            @JsonProperty("title") val title: String,
+            @JsonProperty("type") val type: String,
+            @JsonProperty("slug") val slug: String
+    )
+
+    data class AnimeTypes(
+            @JsonProperty("TV") val TV: String,
+            @JsonProperty("OVA") val OVA: String,
+            @JsonProperty("Movie") val Movie: String,
+            @JsonProperty("Special") val Special: String,
+            @JsonProperty("ONA") val ONA: String,
+            @JsonProperty("Music") val Music: String
+    )
+
     override suspend fun search(query: String): List<SearchResponse> {
-        val url = "$mainUrl/?s=${query}"
-        val document = app.get(url).document
-
-        return document.select("li.xxx.TPostMv").map {
-            val title = it.selectFirst("h2.Title")!!.text()
-            val href = it.selectFirst("a")!!.attr("href")
-            val image = it.selectFirst("img.lazy")!!.attr("data-src")
-            val isSerie = href.contains("/serie/")
-
-            if (isSerie) {
-                TvSeriesSearchResponse(
-                        title,
-                        href,
-                        this.name,
-                        TvType.TvSeries,
-                        image,
-                        null,
-                        null
-                )
-            } else {
-                MovieSearchResponse(
-                        title,
-                        href,
-                        this.name,
-                        TvType.Movie,
-                        image,
-                        null
-                )
-            }
-        }
-    }
-
-    override suspend fun load(url: String): LoadResponse? {
-        val soup = app.get(url, timeout = 120).document
-        val title = soup.selectFirst("h1.Title")!!.text()
-        val description = soup.selectFirst(".Description p")?.text()?.trim()
-        val poster: String? = soup.selectFirst(".movtv-info div.Image img")!!.attr("data-src")
-        val year1 = soup.selectFirst("footer p.meta").toString()
-        val yearRegex = Regex("<span>(\\d+)</span>")
-        val yearf =
-                yearRegex.find(year1)?.destructured?.component1()?.replace(Regex("<span>|</span>"), "")
-        val year = if (yearf.isNullOrBlank()) null else yearf.toIntOrNull()
-        val episodes = soup.select(".all-episodes li.TPostMv article").map { li ->
-            val href = li.select("a").attr("href")
-            val epThumb =
-                    li.selectFirst("div.Image img")?.attr("data-src") ?: li.selectFirst("img.lazy")!!
-                            .attr("data-srcc")
-            val seasonid = li.selectFirst("span.Year")!!.text().let { str ->
-                str.split("x").mapNotNull { subStr -> subStr.toIntOrNull() }
-            }
-            val isValid = seasonid.size == 2
-            val episode = if (isValid) seasonid.getOrNull(1) else null
-            val season = if (isValid) seasonid.getOrNull(0) else null
-            Episode(
+        val main = app.get("$mainUrl/api/search?value=$query").text
+        //val json = parseJson<MainSearch>(main)
+        val json = parseJson<ArrayList<Searching>>(main)
+        return json.apmap {
+            val title = it.title
+            val href = "$mainUrl/hentai-${it.slug}"
+            val image = mainUrl + "uploads/portadas/${it.id}.jpg"
+            AnimeSearchResponse(
+                    title,
                     href,
+                    this.name,
+                    TvType.Anime,
+                    image,
                     null,
-                    season,
-                    episode,
-                    fixUrl(epThumb)
+                    if (title.contains("Latino") || title.contains("Castellano")) EnumSet.of(
+                            DubStatus.Dubbed
+                    ) else EnumSet.of(DubStatus.Subbed),
             )
         }
-        val tags = soup.select("ul.InfoList li.AAIco-adjust:contains(Genero) a").map { it.text() }
-        val tvType = if (episodes.isEmpty()) TvType.Movie else TvType.TvSeries
-        val recelement =
-                if (tvType == TvType.TvSeries) "main section div.series_listado.series div.xxx"
-                else "main section ul.MovieList li"
-        val recommendations =
-                soup.select(recelement).mapNotNull { element ->
-                    val recTitle = element.select("h2.Title").text() ?: return@mapNotNull null
-                    val image = element.select("figure img")?.attr("data-src")
-                    val recUrl = fixUrl(element.select("a").attr("href"))
-                    MovieSearchResponse(
-                            recTitle,
-                            recUrl,
-                            this.name,
-                            TvType.Movie,
-                            image,
-                            year = null
-                    )
-                }
+    }
 
-        return when (tvType) {
-            TvType.TvSeries -> {
-                TvSeriesLoadResponse(
-                        title,
-                        url,
-                        this.name,
-                        tvType,
-                        episodes,
-                        poster,
-                        year,
-                        description,
-                        tags = tags,
-                        recommendations = recommendations
-                )
-            }
-            TvType.Movie -> {
-                MovieLoadResponse(
-                        title,
-                        url,
-                        this.name,
-                        tvType,
-                        url,
-                        poster,
-                        year,
-                        description,
-                        tags = tags,
-                        recommendations = recommendations
-                )
-            }
+    override suspend fun load(url: String): LoadResponse {
+        val doc = app.get(url, timeout = 120).document
+        val poster = mainUrl + doc.selectFirst("#aa-wp > div > section > article > div.h-thumb > figure > img")?.attr("src")
+        val title = doc.selectFirst(".h-title")?.text()
+        val type = "OVA"
+        val description = doc.selectFirst(".h-content > p")?.text()
+        val genres = doc.select(".genres > a")
+                .map { it.text() }
+        val status = when (doc.selectFirst(".status-off")?.text()) {
+            "En emisión" -> ShowStatus.Ongoing
+            "Concluido" -> ShowStatus.Completed
             else -> null
+        }
+
+        //Espacio Prueba
+        val test = doc.select("article.hentai.episode.sm").size
+        val x = doc.select(".episodes-list a").attr("href")
+        val episodes1 = java.util.ArrayList<Episode>()
+        val z = x?.substring(x.lastIndexOf("-")).toString()
+        val n = x?.replace(z,"")
+
+        for(i in 1..test) {
+             val ff = doc.select(".episodes-list article:nth-child("+((test+1)-i)+") img").attr("src")
+            val zz = mainUrl.removeSuffix("/")+ff
+            val link = "${
+                //url.removeSuffix("/")}/$it"
+                mainUrl.removeSuffix("/")+n}-"+i
+            val ep = Episode(
+                    link,
+                    posterUrl = zz
+            )
+            episodes1.add(ep)
+        }
+
+        //Fin espacio prueba
+
+        return newAnimeLoadResponse(title!!, url, TvType.Others) {
+            posterUrl = poster
+            addEpisodes(DubStatus.Subbed, episodes1)
+            showStatus = status
+            plot = description
+            tags = genres
         }
     }
 
-    data class Femcuevana(
-            @JsonProperty("url") val url: String,
+    data class Nozomi(
+            @JsonProperty("file") val file: String?
     )
+
+    private fun streamClean(
+            name: String,
+            url: String,
+            referer: String,
+            quality: String?,
+            callback: (ExtractorLink) -> Unit,
+            m3u8: Boolean
+    ): Boolean {
+        callback(
+                ExtractorLink(
+                        name,
+                        name,
+                        url,
+                        referer,
+                        getQualityFromName(quality),
+                        m3u8
+                )
+        )
+        return true
+    }
 
     override suspend fun loadLinks(
             data: String,
@@ -202,126 +234,13 @@ class CuevanaProvider : MainAPI() {
             subtitleCallback: (SubtitleFile) -> Unit,
             callback: (ExtractorLink) -> Unit
     ): Boolean {
-        app.get(data).document.select("div.TPlayer.embed_div iframe").apmap {
-            val iframe = fixUrl(it.attr("data-src"))
-            if (iframe.contains("api.cuevana3.me/fembed/")) {
-                val femregex =
-                        Regex("(https.\\/\\/api\\.cuevana3\\.me\\/fembed\\/\\?h=[a-zA-Z0-9]{0,8}[a-zA-Z0-9_-]+)")
-                femregex.findAll(iframe).map { femreg ->
-                    femreg.value
-                }.toList().apmap { fem ->
-                    val key = fem.replace("https://api.cuevana3.me/fembed/?h=", "")
-                    val url = app.post(
-                            "https://api.cuevana3.me/fembed/api.php",
-                            allowRedirects = false,
-                            headers = mapOf(
-                                    "Host" to "api.cuevana3.me",
-                                    "User-Agent" to USER_AGENT,
-                                    "Accept" to "application/json, text/javascript, */*; q=0.01",
-                                    "Accept-Language" to "en-US,en;q=0.5",
-                                    "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8",
-                                    "X-Requested-With" to "XMLHttpRequest",
-                                    "Origin" to "https://api.cuevana3.me",
-                                    "DNT" to "1",
-                                    "Connection" to "keep-alive",
-                                    "Sec-Fetch-Dest" to "empty",
-                                    "Sec-Fetch-Mode" to "cors",
-                                    "Sec-Fetch-Site" to "same-origin",
-                            ),
-                            data = mapOf(Pair("h", key))
-                    ).text
-                    val json = parseJson<Femcuevana>(url)
-                    val link = json.url
-                    if (link.contains("fembed")) {
-                        loadExtractor(link, data, subtitleCallback, callback)
-                    }
-                }
-            }
-            if (iframe.contains("tomatomatela")) {
-                val tomatoRegex =
-                        Regex("(\\/\\/apialfa.tomatomatela.com\\/ir\\/player.php\\?h=[a-zA-Z0-9]{0,8}[a-zA-Z0-9_-]+)")
-                tomatoRegex.findAll(iframe).map { tomreg ->
-                    tomreg.value
-                }.toList().apmap { tom ->
-                    val tomkey = tom.replace("//apialfa.tomatomatela.com/ir/player.php?h=", "")
-                    app.post(
-                            "https://apialfa.tomatomatela.com/ir/rd.php", allowRedirects = false,
-                            headers = mapOf(
-                                    "Host" to "apialfa.tomatomatela.com",
-                                    "User-Agent" to USER_AGENT,
-                                    "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-                                    "Accept-Language" to "en-US,en;q=0.5",
-                                    "Content-Type" to "application/x-www-form-urlencoded",
-                                    "Origin" to "null",
-                                    "DNT" to "1",
-                                    "Connection" to "keep-alive",
-                                    "Upgrade-Insecure-Requests" to "1",
-                                    "Sec-Fetch-Dest" to "iframe",
-                                    "Sec-Fetch-Mode" to "navigate",
-                                    "Sec-Fetch-Site" to "same-origin",
-                            ),
-                            data = mapOf(Pair("url", tomkey))
-                    ).okhttpResponse.headers.values("location").apmap { loc ->
-                        if (loc.contains("goto_ddh.php")) {
-                            val gotoregex =
-                                    Regex("(\\/\\/api.cuevana3.me\\/ir\\/goto_ddh.php\\?h=[a-zA-Z0-9]{0,8}[a-zA-Z0-9_-]+)")
-                            gotoregex.findAll(loc).map { goreg ->
-                                goreg.value.replace("//api.cuevana3.me/ir/goto_ddh.php?h=", "")
-                            }.toList().apmap { gotolink ->
-                                app.post(
-                                        "https://api.cuevana3.me/ir/redirect_ddh.php",
-                                        allowRedirects = false,
-                                        headers = mapOf(
-                                                "Host" to "api.cuevana3.me",
-                                                "User-Agent" to USER_AGENT,
-                                                "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-                                                "Accept-Language" to "en-US,en;q=0.5",
-                                                "Content-Type" to "application/x-www-form-urlencoded",
-                                                "Origin" to "null",
-                                                "DNT" to "1",
-                                                "Connection" to "keep-alive",
-                                                "Upgrade-Insecure-Requests" to "1",
-                                                "Sec-Fetch-Dest" to "iframe",
-                                                "Sec-Fetch-Mode" to "navigate",
-                                                "Sec-Fetch-Site" to "same-origin",
-                                        ),
-                                        data = mapOf(Pair("url", gotolink))
-                                ).okhttpResponse.headers.values("location").apmap { golink ->
-                                    loadExtractor(golink, data, subtitleCallback, callback)
-                                }
-                            }
-                        }
-                        if (loc.contains("index.php?h=")) {
-                            val indexRegex =
-                                    Regex("(\\/\\/api.cuevana3.me\\/sc\\/index.php\\?h=[a-zA-Z0-9]{0,8}[a-zA-Z0-9_-]+)")
-                            indexRegex.findAll(loc).map { indreg ->
-                                indreg.value.replace("//api.cuevana3.me/sc/index.php?h=", "")
-                            }.toList().apmap { inlink ->
-                                app.post(
-                                        "https://api.cuevana3.me/sc/r.php", allowRedirects = false,
-                                        headers = mapOf(
-                                                "Host" to "api.cuevana3.me",
-                                                "User-Agent" to USER_AGENT,
-                                                "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-                                                "Accept-Language" to "en-US,en;q=0.5",
-                                                "Accept-Encoding" to "gzip, deflate, br",
-                                                "Content-Type" to "application/x-www-form-urlencoded",
-                                                "Origin" to "null",
-                                                "DNT" to "1",
-                                                "Connection" to "keep-alive",
-                                                "Upgrade-Insecure-Requests" to "1",
-                                                "Sec-Fetch-Dest" to "iframe",
-                                                "Sec-Fetch-Mode" to "navigate",
-                                                "Sec-Fetch-Site" to "same-origin",
-                                                "Sec-Fetch-User" to "?1",
-                                        ),
-                                        data = mapOf(Pair("h", inlink))
-                                ).okhttpResponse.headers.values("location").apmap { link ->
-                                    loadExtractor(link, data, subtitleCallback, callback)
-                                }
-                            }
-                        }
-                    }
+        app.get(data).document.select("script").apmap { script ->
+            if (script.data().contains("var videos = [[")) {
+                val videos = script.data().replace("\\/", "/")
+                fetchUrls(videos).map {
+                    it.replace("https://ok.ru", "http://ok.ru")
+                }.apmap {
+                    loadExtractor(it, data, subtitleCallback, callback)
                 }
             }
         }
